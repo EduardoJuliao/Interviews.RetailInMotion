@@ -11,7 +11,7 @@ namespace Interviews.RetailInMotion.Domain.Entities
         public Guid Id { get; set; }
         public Guid ItemId { get; set; }
 
-        public virtual Item Item { get; set; } = new Item();
+        public virtual Product Item { get; set; } = new Product();
 
         public int QuantityAvailable { get; set; }
     }

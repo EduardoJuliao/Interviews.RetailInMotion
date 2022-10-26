@@ -18,7 +18,7 @@ namespace Interviews.RetailInMotion.Domain.Entities
         public virtual Address DeliveryAddress { get; set; } = new Address();
         public virtual Address BillingAddress { get; set; } = new Address();
 
-        public virtual List<OrderItem> OrderItems { get; private set; } = new List<OrderItem>();
+        public virtual List<OrderProduct> OrderItems { get; private set; } = new List<OrderProduct>();
         public double TotalPrice=> OrderItems.Any()
             ? OrderItems
                 .Select(x => x.Item.Price * x.Quantity)

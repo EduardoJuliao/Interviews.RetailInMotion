@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace Interviews.RetailInMotion.Domain.Entities
 {
-    public class OrderItem
+    public class Product
     {
         public Guid Id { get; set; }
-        public Guid OrderId { get; set; }
-        public Item Item { get; set; } = new Item();
-        public int Quantity { get; set; }
+        public string Name { get; set; } = String.Empty;
+        public double Price { get; set; }
     }
 }
