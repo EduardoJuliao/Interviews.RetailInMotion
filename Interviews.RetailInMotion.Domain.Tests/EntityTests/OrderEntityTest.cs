@@ -21,15 +21,15 @@ namespace Interviews.RetailInMotion.Domain.Tests.EntityTests
         public void CalculateFullPriceCorrectly()
         {
             var order = new Order();
-            order.OrderItems.Add(new OrderItem()
+            order.OrderItems.Add(new OrderProduct()
             {
-                Item = new Item() { Price = 5},
+                Item = new Product() { Price = 5},
                 Quantity = 1
             });
 
-            order.OrderItems.Add(new OrderItem()
+            order.OrderItems.Add(new OrderProduct()
             {
-                Item = new Item() { Price = 2.50 },
+                Item = new Product() { Price = 2.50 },
                 Quantity = 3
             });
 
