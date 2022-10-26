@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interviews.RetailInMotion.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interviews.RetailInMotion.Domain.Tests", "Interviews.RetailInMotion.Domain.Tests\Interviews.RetailInMotion.Domain.Tests.csproj", "{5BAB9293-8940-4C3F-9548-DE948A679B66}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interviews.RetailInMotion.Repository", "Interviews.RetailInMotion.Repository\Interviews.RetailInMotion.Repository.csproj", "{F170044D-90D7-410C-B3C1-A6687018C0A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5BAB9293-8940-4C3F-9548-DE948A679B66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAB9293-8940-4C3F-9548-DE948A679B66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BAB9293-8940-4C3F-9548-DE948A679B66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F170044D-90D7-410C-B3C1-A6687018C0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F170044D-90D7-410C-B3C1-A6687018C0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F170044D-90D7-410C-B3C1-A6687018C0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F170044D-90D7-410C-B3C1-A6687018C0A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
