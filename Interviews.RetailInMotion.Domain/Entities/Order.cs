@@ -10,7 +10,7 @@ namespace Interviews.RetailInMotion.Domain.Entities
     public class Order
     {
         public Guid Id { get; set; }
-        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset CreationDate { get; set; }
         public DateTimeOffset LastUpdated { get; set; }
         public OrderStatus Status;
 

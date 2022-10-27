@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interviews.RetailInMotion.Domain\Interviews.RetailInMotion.Domain.csproj" />
+    <ProjectReference Include="..\Interviews.RetailInMotion.Repository\Interviews.RetailInMotion.Repository.csproj" />
   </ItemGroup>
 
 </Project>

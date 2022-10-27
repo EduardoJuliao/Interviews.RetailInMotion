@@ -15,6 +15,13 @@ namespace Interviews.RetailInMotion.Repository
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        }
+
         public DbSet<Order> Orders { get; set; }
         public DbSet<Stock> Stock { get; set; }
     }
