@@ -18,13 +18,13 @@ namespace Interviews.RetailInMotion.Domain.Tests.EntityTests
             var order = new Order();
             order.OrderProducts.Add(new OrderProduct()
             {
-                ProductItem = new Product() { Price = 5},
+                Product = new Product() { Price = 5},
                 Quantity = 1
             });
 
             order.OrderProducts.Add(new OrderProduct()
             {
-                ProductItem = new Product() { Price = 2.50 },
+                Product = new Product() { Price = 2.50 },
                 Quantity = 3
             });
 

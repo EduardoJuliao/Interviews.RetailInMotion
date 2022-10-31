@@ -6,5 +6,6 @@ namespace Interviews.RetailInMotion.Domain.Interfaces.Repositories
     {
         Task<Product> SecureProduct(Guid productId, int quantity);
         Task ReturnProductToStock(Guid productId, int quantity);
+        Task<bool> IsProductAvailable(Guid productId, int quantity);
     }
 }

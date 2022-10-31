@@ -10,5 +10,7 @@
 
         public Guid StockId { get; set; }
         public Stock Stock { get; set; }
+
+        public IList<OrderProduct> OrderProduct { get; set; } = new List<OrderProduct>();
     }
 }

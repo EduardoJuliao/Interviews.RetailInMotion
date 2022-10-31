@@ -16,7 +16,7 @@ namespace Interviews.RetailInMotion.Domain.Entities
 
         public double TotalPrice => OrderProducts.Any()
             ? OrderProducts
-                .Select(x => x.ProductItem.Price * x.Quantity)
+                .Select(x => x.Product.Price * x.Quantity)
                 .Sum()
             : 0d;
     }

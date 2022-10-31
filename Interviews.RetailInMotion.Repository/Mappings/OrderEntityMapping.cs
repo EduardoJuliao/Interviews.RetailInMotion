@@ -29,16 +29,6 @@ namespace Interviews.RetailInMotion.Repository.Mappings
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            //builder.HasOne(x => x.DeliveryAddress)
-            //    .WithMany(x => x.Orders)
-            //    .HasForeignKey(x => x.DeliveryAddressId);
-
-            //builder.HasOne(x => x.BillingAddress)
-            //    .WithMany(x => x.Orders)
-            //    .HasForeignKey(x => x.BillingAddressId);
-
-            builder.Ignore(x => x.OrderProducts);
-
             builder.Ignore(x => x.TotalPrice);
         }
     }

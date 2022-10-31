@@ -28,12 +28,27 @@ namespace Interviews.RetailInMotion.Domain.Services
             this._stockRepository = stockRepository;
         }
 
+        public async Task<(bool productsAvailable, List<Guid> unavailableProductIds)> HasProductAvailability(IEnumerable<OrderProduct> productsInOrder)
+        {
+            var unavailableProductIds = new List<Guid>();
+
+            //TODO: This can be further improved byu using joins instead of using for
+            foreach(var orderProduct in productsInOrder)
+            {
+                var isProductAvailable = await _stockRepository.IsProductAvailable(orderProduct.ProductId, orderProduct.Quantity);
+                if (!isProductAvailable)
+                    unavailableProductIds.Add(orderProduct.ProductId);
+            }
+
+            return (!unavailableProductIds.Any(), unavailableProductIds);
+        }
+
         public async Task ReturnProduct(Guid productId, int quantity)
         {
             await _stockRepository.ReturnProductToStock(productId, quantity);
         }
 
-        public Task<Product> ReturnProducts(IEnumerable<KeyValuePair<Guid, int>> productQuantity)
+        public Task ReturnProducts(IEnumerable<KeyValuePair<Guid, int>> productQuantity)
         {
             throw new NotImplementedException();
         }
@@ -43,9 +58,10 @@ namespace Interviews.RetailInMotion.Domain.Services
             return await _stockRepository.SecureProduct(productId, quantity);
         }
 
-        public Task<Product> SecureProducts(IEnumerable<KeyValuePair<Guid, int>> productQuantity)
+        public async Task SecureProducts(IEnumerable<KeyValuePair<Guid, int>> productQuantity)
         {
-            throw new NotImplementedException();
+            foreach (var product in productQuantity)
+                await SecureProduct(product.Key, product.Value);
         }
     }
 }

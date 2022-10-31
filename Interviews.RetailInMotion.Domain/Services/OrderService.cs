@@ -14,6 +14,7 @@ namespace Interviews.RetailInMotion.Domain.Services
         private readonly ILogger<OrderService> _logger;
         private readonly IOrderFactory _orderFactory;
         private readonly IOrderRepository _orderRepository;
+        private readonly IStockService _stockService;
 
         public delegate void OrderCanceledEventHandler(object sender, OrderCanceledEventArgs e);
         public event OrderCanceledEventHandler OrderCanceledEvent;
@@ -24,11 +25,13 @@ namespace Interviews.RetailInMotion.Domain.Services
         public OrderService(
             ILogger<OrderService> logger,
             IOrderFactory orderFactory,
-            IOrderRepository orderRepository)
+            IOrderRepository orderRepository,
+            IStockService stockService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _orderFactory = orderFactory ?? throw new ArgumentNullException(nameof(orderFactory));
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+            _stockService = stockService ?? throw new ArgumentNullException(nameof(stockService));
         }
 
         public async Task<Order> CancelOrder(Guid orderId)
@@ -57,7 +60,17 @@ namespace Interviews.RetailInMotion.Domain.Services
                 .AddBillingAddress(orderModel.BillingAddress)
                 .AddDeliveryAddress(orderModel.DeliveryAddress)
                 .BillingAddressSameAsDelivery(orderModel.BillingAddressSameAsDelivery)
+                .AddProducts(orderModel.Products)
                 .Build();
+
+            var productAvailability = await _stockService.HasProductAvailability(newOrder.OrderProducts);
+            if (!productAvailability.productsAvailable)
+                throw new Exception("Some Products aren't available in the desired quantity!" +
+                    Environment.NewLine + "List of Products:" + Environment.NewLine +
+                    String.Join(Environment.NewLine, productAvailability.unavailableProductIds));
+
+            await _stockService
+                .SecureProducts(newOrder.OrderProducts.Select(x => new KeyValuePair<Guid, int>(x.ProductId, x.Quantity)));
 
             var order = await _orderRepository.CreateOrder(newOrder);
 

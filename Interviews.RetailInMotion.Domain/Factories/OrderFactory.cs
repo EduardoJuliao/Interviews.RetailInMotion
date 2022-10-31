@@ -1,6 +1,7 @@
 ﻿using Interviews.RetailInMotion.Domain.Entities;
 using Interviews.RetailInMotion.Domain.Enums;
 using Interviews.RetailInMotion.Domain.Interfaces.Factories;
+using Interviews.RetailInMotion.Domain.Models;
 
 namespace Interviews.RetailInMotion.Domain.Factories
 {
@@ -63,7 +64,7 @@ namespace Interviews.RetailInMotion.Domain.Factories
                 existingAddress.Address.PostalCode = address.PostalCode;
             }
 
-            
+
             return this;
         }
 
@@ -74,8 +75,27 @@ namespace Interviews.RetailInMotion.Domain.Factories
 
             _newOrder.OrderProducts.Add(new OrderProduct
             {
+                Product = product,
                 Quantity = quantity,
             });
+
+            return this;
+        }
+
+        public IOrderFactory AddProducts(List<CreateOrderProductModel> products)
+        {
+            if (products == null)
+                return this;
+
+            foreach (var product in products)
+            {
+                _newOrder.OrderProducts.Add(new OrderProduct
+                {
+                    ProductId = product.ProductId,
+                    Quantity = product.Quantity,
+                });
+            }
+
 
             return this;
         }

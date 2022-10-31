@@ -22,18 +22,31 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
     {
         private ApplicationDbContext _context;
         private IOrderRepository _orderRepository;
+        private IStockRepository _stockRepository;
         private IOrderService _orderService;
+        private IStockService _stockService;
+
+        private readonly Guid DvdProductId = new Guid("8073a0c8-02eb-44e4-a6ae-2e29294bd0b1");
+        private readonly Guid BookProductId = new Guid("e39adf2e-fd84-4fde-bba1-765e10ce8fef");
+        private readonly Guid CdProductId = new Guid("fd9272fd-c6e0-4013-a862-145e1d3ef4d3");
 
         [SetUp]
         public void SetUp()
         {
             _context = EntityFrameworkHelper.CreateDatabase();
             _orderRepository = new OrderRepository(_context);
+            _stockRepository = new StockRepository(_context);
+
+            _stockService = new StockService(
+                Substitute.For<ILogger<StockService>>(),
+                _stockRepository
+                );
 
             _orderService = new OrderService(
                 Substitute.For<ILogger<OrderService>>(),
                 new OrderFactory(),
-                _orderRepository);
+                _orderRepository,
+                _stockService);
 
             CreateStubProducts();
         }
@@ -43,7 +56,7 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
             var dvd = _context.Products.Add(
                new Product
                {
-                   Id = new Guid("8073a0c8-02eb-44e4-a6ae-2e29294bd0b1"),
+                   Id = DvdProductId,
                    Name = "DVD",
                    Price = 10,
                });
@@ -51,7 +64,7 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
             var book = _context.Products.Add(
                new Product
                {
-                   Id = new Guid("e39adf2e-fd84-4fde-bba1-765e10ce8fef"),
+                   Id = BookProductId,
                    Name = "Book",
                    Price = 5,
                });
@@ -59,7 +72,7 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
             var cd = _context.Products.Add(
                 new Product
                 {
-                    Id = new Guid("fd9272fd-c6e0-4013-a862-145e1d3ef4d3"),
+                    Id = CdProductId,
                     Name = "CD",
                     Price = 2.50,
                 });
@@ -112,7 +125,11 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
                 CreationDate = DateTimeOffset.UtcNow,
                 Products = new List<CreateOrderProductModel>
                 {
-
+                    new CreateOrderProductModel
+                    {
+                        ProductId = DvdProductId,
+                        Quantity = 10
+                    }
                 },
                 DeliveryAddress = new Address
                 {
@@ -159,6 +176,66 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
             Assert.AreEqual(order.OrderAddresses[0].Address.Street, orderToCreate.DeliveryAddress.Street);
             Assert.AreEqual(order.OrderAddresses[0].Address.PostalCode, orderToCreate.DeliveryAddress.PostalCode);
             Assert.AreEqual(order.OrderAddresses[0].Address.AddressType, AddressType.Same);
+        }
+
+        [Test]
+        public async Task ProductsInOrderAreRemovedFromStock()
+        {
+            var orderToCreate = new CreateOrderModel
+            {
+                CreationDate = DateTimeOffset.UtcNow,
+                Products = new List<CreateOrderProductModel>
+                {
+                    new CreateOrderProductModel
+                    {
+                        ProductId = DvdProductId,
+                        Quantity = 10
+                    }
+                },
+                DeliveryAddress = new Address
+                {
+                    PostalCode = "Postal Code 1",
+                    Street = "Street 1"
+                },
+                BillingAddress = new Address
+                {
+                    PostalCode = "Postal Code 2",
+                    Street = "Street 2"
+                },
+            };
+
+            await _orderService.CreateOrder(orderToCreate);
+
+            Assert.AreEqual(40, _context.Stock.Single(x => x.ProductId == DvdProductId).QuantityAvailable);
+        }
+
+        [Test]
+        public void ThrowExceptionIfStockDoesntHaveRequiredQuantityOfProducts()
+        {
+            var orderToCreate = new CreateOrderModel
+            {
+                CreationDate = DateTimeOffset.UtcNow,
+                Products = new List<CreateOrderProductModel>
+                {
+                    new CreateOrderProductModel
+                    {
+                        ProductId = DvdProductId,
+                        Quantity = 999
+                    }
+                },
+                DeliveryAddress = new Address
+                {
+                    PostalCode = "Postal Code 1",
+                    Street = "Street 1"
+                },
+                BillingAddress = new Address
+                {
+                    PostalCode = "Postal Code 2",
+                    Street = "Street 2"
+                },
+            };
+
+            Assert.ThrowsAsync<Exception>(async () => await _orderService.CreateOrder(orderToCreate));
         }
 
         [Test]
