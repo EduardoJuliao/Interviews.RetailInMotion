@@ -1,5 +1,6 @@
 using Interviews.RetailInMotion.Domain.Interfaces.Repositories;
 using Interviews.RetailInMotion.Domain.Interfaces.Services;
+using Interviews.RetailInMotion.Domain.Mappers;
 using Interviews.RetailInMotion.Domain.Services;
 using Interviews.RetailInMotion.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +22,11 @@ services.AddDbContext<ApplicationDbContext>(options =>
 
 services.AddSingleton<IOrderService, OrderService>();
 services.AddSingleton<IStockService, StockService>();
+
 services.AddSingleton<IOrderRepository, OrderRepository>();
 services.AddSingleton<IStockRepository, StockRepository>();
+
+services.AddAutoMapper(typeof(OrderMapperProfile));
 
 var serilogger = new LoggerConfiguration()
     .WriteTo.Console()

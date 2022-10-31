@@ -24,17 +24,25 @@ namespace Interviews.RetailInMotion.Repository.Mappings
                 .HasDefaultValue(DateTimeOffset.Now)
                 .IsRequired();
 
-            builder.Property(x => x.LastUpdated)
-                .HasDefaultValue(DateTimeOffset.Now)
-                .IsRequired();
+            builder.Property(x => x.LastUpdatedDate)
+                .IsRequired(false);
 
-            builder.Property(x => x.DeliveryAddressSameAsBilling)
+            builder.Property(x => x.CanceledDate)
+                .IsRequired(false);
+
+            builder.Property(x => x.BillingAddressSameAsDelivery)
                 .IsRequired()
                 .HasDefaultValue(false);
 
-            builder.Ignore(x => x.DeliveryAddress);
-            builder.Ignore(x => x.BillingAddress);
-            builder.Ignore(x => x.OrderItems);
+            //builder.HasOne(x => x.DeliveryAddress)
+            //    .WithMany(x => x.Orders)
+            //    .HasForeignKey(x => x.DeliveryAddressId);
+
+            //builder.HasOne(x => x.BillingAddress)
+            //    .WithMany(x => x.Orders)
+            //    .HasForeignKey(x => x.BillingAddressId);
+
+            builder.Ignore(x => x.OrderProducts);
 
             builder.Ignore(x => x.TotalPrice);
         }

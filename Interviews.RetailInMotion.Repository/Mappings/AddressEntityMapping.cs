@@ -1,11 +1,6 @@
 ﻿using Interviews.RetailInMotion.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interviews.RetailInMotion.Repository.Mappings
 {
@@ -13,8 +8,6 @@ namespace Interviews.RetailInMotion.Repository.Mappings
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {
-            builder.ToTable("Address");
-
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
@@ -25,6 +18,9 @@ namespace Interviews.RetailInMotion.Repository.Mappings
                 .HasMaxLength(Address.StreetMaxLenght);
 
             builder.Property(x => x.PostalCode)
+                .IsRequired();
+
+            builder.Property(x => x.AddressType)
                 .IsRequired();
         }
     }

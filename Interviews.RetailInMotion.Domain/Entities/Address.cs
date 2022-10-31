@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interviews.RetailInMotion.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,9 @@ namespace Interviews.RetailInMotion.Domain.Entities
         public const int StreetMaxLenght = 256;
 
         public Guid Id { get; set; }
-        public string Street { get; set; }
-        public string PostalCode { get; set; }
+        public string Street { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
+        public AddressType AddressType { get; set; }
+        public IList<OrderAddress> OrderAddresses { get; set; } = new List<OrderAddress>();
     }
 }

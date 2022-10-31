@@ -11,17 +11,17 @@ namespace Interviews.RetailInMotion.Domain.Entities
     {
         public Guid Id { get; set; }
         public DateTimeOffset CreationDate { get; set; }
-        public DateTimeOffset LastUpdated { get; set; }
-        public OrderStatus Status;
+        public DateTimeOffset? LastUpdatedDate { get; set; }
+        public DateTimeOffset? CanceledDate { get; set; }
+        public OrderStatus? Status;
+        public bool BillingAddressSameAsDelivery { get; set; }
 
-        public bool DeliveryAddressSameAsBilling { get; set; }
-        public virtual Address DeliveryAddress { get; set; } = new Address();
-        public virtual Address BillingAddress { get; set; } = new Address();
+        public IList<OrderAddress> OrderAddresses { get; set; } = new List<OrderAddress>();
+        public IList<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 
-        public virtual List<OrderProduct> OrderItems { get; private set; } = new List<OrderProduct>();
-        public double TotalPrice=> OrderItems.Any()
-            ? OrderItems
-                .Select(x => x.Item.Price * x.Quantity)
+        public double TotalPrice => OrderProducts.Any()
+            ? OrderProducts
+                .Select(x => x.ProductItem.Price * x.Quantity)
                 .Sum()
             : 0d;
     }
