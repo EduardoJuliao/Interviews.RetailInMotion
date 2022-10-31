@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Interviews.RetailInMotion.Domain.Entities;
+﻿using Interviews.RetailInMotion.Domain.Entities;
 using Interviews.RetailInMotion.Domain.Enums;
 using Interviews.RetailInMotion.Domain.EventArgs.Order;
 using Interviews.RetailInMotion.Domain.Interfaces.Factories;
@@ -7,11 +6,6 @@ using Interviews.RetailInMotion.Domain.Interfaces.Repositories;
 using Interviews.RetailInMotion.Domain.Interfaces.Services;
 using Interviews.RetailInMotion.Domain.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interviews.RetailInMotion.Domain.Services
 {
