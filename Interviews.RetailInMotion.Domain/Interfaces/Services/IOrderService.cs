@@ -10,7 +10,7 @@ namespace Interviews.RetailInMotion.Domain.Interfaces.Services
         Task<IEnumerable<Order>> GetOrders(int take = 20, int skip = 0);
         Task<Order> CreateOrder(CreateOrderModel orderModel);
         Task<Order> UpdateAddress(Guid orderId, UpdateAddressModel addressModel);
-        Task<Order> UpdateOrderProducts(Guid orderId, IEnumerable<Product> products);
+        Task<Order> UpdateOrderProducts(Guid orderId, IEnumerable<CreateOrderProductModel> products);
         Task<Order> CancelOrder(Guid orderId);
 
         public event OrderCreatedEventHandler OrderCreatedEvent;

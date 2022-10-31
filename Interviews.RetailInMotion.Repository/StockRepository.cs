@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Interviews.RetailInMotion.Repository
 {
-    public class StockRepository : IStockRepository
+    public class StockRepository : BaseRepository, IStockRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
-
         public StockRepository(ApplicationDbContext applicationDbContext)
+            :base(applicationDbContext)
         {
-            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<Product> SecureProduct(Guid productId, int quantity)

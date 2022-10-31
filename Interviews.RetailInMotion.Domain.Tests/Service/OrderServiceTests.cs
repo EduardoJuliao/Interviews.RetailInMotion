@@ -376,5 +376,53 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
 
             Assert.ThrowsAsync<Exception>(async () => await _orderService.CancelOrder(order.Id));
         }
+
+        [Test]
+        public async Task CanUpdateProducts()
+        {
+            var order = await _orderService.CreateOrder(new CreateOrderModel
+            {
+                CreationDate = DateTimeOffset.UtcNow,
+                Products = new List<CreateOrderProductModel>
+                {
+                    new CreateOrderProductModel
+                    {
+                        ProductId = DvdProductId,
+                        Quantity = 1
+                    },
+                    new CreateOrderProductModel
+                    {
+                        ProductId = CdProductId,
+                        Quantity = 1
+                    }
+                },
+                DeliveryAddress = new Address
+                {
+                    PostalCode = "Postal Code 1",
+                    Street = "Street 1"
+                },
+                BillingAddress = new Address
+                {
+                    PostalCode = "Postal Code 2",
+                    Street = "Street 2"
+                },
+            });
+
+            await _orderRepository.UpdateOrder(order);
+
+            //Update Dvd to 5, remove Cd and add Book
+
+            var updatedProducts = new List<CreateOrderProductModel>
+            {
+                new CreateOrderProductModel { ProductId = DvdProductId, Quantity = 5 },
+                new CreateOrderProductModel { ProductId = BookProductId, Quantity = 4 },
+            };
+
+            var updatedOrder = await _orderService.UpdateOrderProducts(order.Id, updatedProducts);
+
+            Assert.AreEqual(2, updatedOrder.OrderProducts.Count);
+            Assert.AreEqual(5, updatedOrder.OrderProducts.Single(x => x.ProductId == DvdProductId).Quantity);
+            Assert.AreEqual(4, updatedOrder.OrderProducts.Single(x => x.ProductId == BookProductId).Quantity);
+        }
     }
 }

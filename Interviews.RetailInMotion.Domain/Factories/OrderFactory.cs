@@ -20,6 +20,9 @@ namespace Interviews.RetailInMotion.Domain.Factories
             if (address == null)
                 return this;
 
+            if(_newOrder.OrderAddresses == null)
+                _newOrder.OrderAddresses = new List<OrderAddress>();
+
             var existingAddress = _newOrder.OrderAddresses
                 .SingleOrDefault(x => x.Address.AddressType == AddressType.Billing);
 
@@ -46,6 +49,9 @@ namespace Interviews.RetailInMotion.Domain.Factories
             if (address == null)
                 return this;
 
+            if (_newOrder.OrderAddresses == null)
+                _newOrder.OrderAddresses = new List<OrderAddress>();
+
             var existingAddress = _newOrder.OrderAddresses
                 .SingleOrDefault(x => x.Address.AddressType == AddressType.Delivery);
 
@@ -68,34 +74,33 @@ namespace Interviews.RetailInMotion.Domain.Factories
             return this;
         }
 
-        public IOrderFactory AddProduct(Product product, int quantity)
-        {
-            if (product == null)
-                return this;
-
-            _newOrder.OrderProducts.Add(new OrderProduct
-            {
-                Product = product,
-                Quantity = quantity,
-            });
-
-            return this;
-        }
-
         public IOrderFactory AddProducts(List<CreateOrderProductModel> products)
         {
             if (products == null)
                 return this;
 
+            if (_newOrder.OrderProducts == null)
+                _newOrder.OrderProducts = new List<OrderProduct>();
+
             foreach (var product in products)
             {
-                _newOrder.OrderProducts.Add(new OrderProduct
-                {
-                    ProductId = product.ProductId,
-                    Quantity = product.Quantity,
-                });
-            }
+                var existingProduct = _newOrder.OrderProducts
+                    .SingleOrDefault(x => x.ProductId == product.ProductId);
 
+                if (existingProduct == null)
+                {
+                    _newOrder.OrderProducts.Add(new OrderProduct
+                    {
+                        Order = _newOrder, 
+                        ProductId = product.ProductId,
+                        Quantity = product.Quantity,
+                    });
+                }
+                else
+                {
+                    existingProduct.Quantity = product.Quantity;
+                }
+            }
 
             return this;
         }

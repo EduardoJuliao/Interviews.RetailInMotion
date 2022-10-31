@@ -4,13 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Interviews.RetailInMotion.Repository
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository : BaseRepository, IOrderRepository
     {
-        private readonly ApplicationDbContext _applicationDbContext;
-
         public OrderRepository(ApplicationDbContext applicationDbContext)
+            :base(applicationDbContext)
         {
-            _applicationDbContext = applicationDbContext;
         }
 
         public Task CancelOrder(Guid orderId)
@@ -35,11 +33,11 @@ namespace Interviews.RetailInMotion.Repository
             return order;
         }
 
-        public async Task<Order> GetOrder(Guid id)
+        public async Task<Order?> GetOrder(Guid id)
         {
             return await _applicationDbContext.Orders
                 .Include(x => x.OrderAddresses)
-                .SingleAsync(x => x.Id == id);
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Order>> GetOrders(int take = 20, int skip = 0)

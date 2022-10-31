@@ -2,7 +2,7 @@
 
 namespace Interviews.RetailInMotion.Domain.Interfaces.Repositories
 {
-    public interface IOrderRepository
+    public interface IOrderRepository : IBaseRepository
     {
         Task<IEnumerable<Order>> GetOrders(int take = 20, int skip = 0);
         Task<Order> GetOrder(Guid id);
