@@ -34,6 +34,55 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
                 Substitute.For<ILogger<OrderService>>(),
                 new OrderFactory(),
                 _orderRepository);
+
+            CreateStubProducts();
+        }
+
+        private void CreateStubProducts()
+        {
+            var dvd = _context.Products.Add(
+               new Product
+               {
+                   Id = new Guid("8073a0c8-02eb-44e4-a6ae-2e29294bd0b1"),
+                   Name = "DVD",
+                   Price = 10,
+               });
+
+            var book = _context.Products.Add(
+               new Product
+               {
+                   Id = new Guid("e39adf2e-fd84-4fde-bba1-765e10ce8fef"),
+                   Name = "Book",
+                   Price = 5,
+               });
+
+            var cd = _context.Products.Add(
+                new Product
+                {
+                    Id = new Guid("fd9272fd-c6e0-4013-a862-145e1d3ef4d3"),
+                    Name = "CD",
+                    Price = 2.50,
+                });
+
+            _context.Stock.Add(new Stock
+            {
+                Product = dvd.Entity,
+                QuantityAvailable = 50
+            });
+
+            _context.Stock.Add(new Stock
+            {
+                Product = book.Entity,
+                QuantityAvailable = 20
+            });
+
+            _context.Stock.Add(new Stock
+            {
+                Product = cd.Entity,
+                QuantityAvailable = 1000
+            });
+
+            _context.SaveChanges();
         }
 
         [Test]
@@ -61,6 +110,10 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
             var order = await _orderService.CreateOrder(new CreateOrderModel
             {
                 CreationDate = DateTimeOffset.UtcNow,
+                Products = new List<CreateOrderProductModel>
+                {
+
+                },
                 DeliveryAddress = new Address
                 {
                     PostalCode = "Postal Code 1",
@@ -70,11 +123,14 @@ namespace Interviews.RetailInMotion.Domain.Tests.Service
                 {
                     PostalCode = "Postal Code 2",
                     Street = "Street 2"
-                }
+                },
             });
 
             Assert.AreNotEqual(order.Id, Guid.Empty);
             Assert.AreEqual(OrderStatus.Created, order.Status);
+            Assert.AreEqual(2, order.OrderAddresses.Count);
+            Assert.AreEqual(1, order.OrderAddresses.Count(x => x.Address.AddressType == AddressType.Delivery));
+            Assert.AreEqual(1, order.OrderAddresses.Count(x => x.Address.AddressType == AddressType.Billing));
         }
 
         [Test]

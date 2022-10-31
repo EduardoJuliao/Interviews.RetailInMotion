@@ -19,5 +19,6 @@ namespace Interviews.RetailInMotion.Repository
 
         public DbSet<Order> Orders { get; set; }
         public DbSet<Stock> Stock { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
